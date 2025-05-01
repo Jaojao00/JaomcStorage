@@ -1,0 +1,152 @@
+######################################################################
+# 📦 JAOMCSTORAGE - CONFIGURATION FILE                               #
+# ✍️ Developed by Tài Nguyễn (c) 2025                                #
+######################################################################
+
+# ✅ Tự động lưu vật phẩm khai thác vào kho người chơi
+PickupToStorage: true
+
+# ⛔ Nếu kho đầy thì không cho khai thác block
+BlockedMining: true
+
+# 🎒 Chỉ lưu vào kho nếu túi đồ đã đầy
+OnlyStoreWhenInvFull: false
+
+# 🔊 Âm thanh khi thêm vật phẩm vào kho
+PickupSound: ENTITY_ITEM_PICKUP
+
+# 📣 Hiện thông báo hành động dưới dạng ActionBar (thanh nhỏ ở dưới)
+UseActionBar: true  # ✅ Mới thêm
+
+# 🌍 Thế giới KHÔNG áp dụng tính năng
+BlacklistWorlds:
+  - world_nether
+  - world_the_end
+
+# 🚫 Vật phẩm KHÔNG được tự lưu vào kho
+Blacklist:
+  - DIAMOND_PICKAXE
+  - TNT
+
+# ✅ Danh sách **vật phẩm** được phép lưu nếu bật whitelist
+Whitelist:
+  - COAL
+  - RAW_IRON
+  - RAW_COPPER
+  - RAW_GOLD
+  - REDSTONE
+  - LAPIS_LAZULI
+  - EMERALD
+  - DIAMOND
+  - QUARTZ
+  - STONE
+  - COBBLESTONE  # đá cuội cũng được lưu
+
+# 🏷️ Tên hiển thị vật phẩm trong kho (giao diện GUI)
+FormatName:
+  COAL: "&7Than"
+  RAW_IRON: "&fQuặng Sắt"
+  RAW_COPPER: "&6Đồng Thô"
+  RAW_GOLD: "&eQuặng Vàng"
+  REDSTONE: "&cĐá Đỏ"
+  LAPIS_LAZULI: "&9Ngọc Lưu Ly"
+  EMERALD: "&aNgọc Lục Bảo"
+  DIAMOND: "&bKim Cương"
+  QUARTZ: "&fThạch Anh"
+  COBBLESTONE: "&8Đá Cuội"
+  STONE: "&7Đá"
+
+# 💰 Cấu hình tiền tệ (khi bán vật phẩm)
+Economy:
+  Provider: VAULT
+  Currency: "$"
+
+# 📦 Dung lượng mặc định cho mỗi người chơi
+MaxSpace: 100000
+
+# 🔁 Cập nhật dữ liệu kho tự động mỗi X giây
+AutoUpdateTime: 30
+
+# 🔄 Tự restart plugin khi config thay đổi?
+RestartOnChange: false
+
+# 📜 Ghi nhật ký hành động (cho admin / debug)
+Log:
+  Sales: true
+  Transfer: true
+  Withdraw: true
+
+# 📝 Mô tả nhiều dòng trong lore khi hiển thị trong kho
+FormatLore:
+  COAL:
+    - "&7Bạn đang có &8{amount} viên than"
+    - "&6Giá bán: &e{price}/cái"
+    - "&eClick để xem tùy chọn"
+  RAW_IRON:
+    - "&7Quặng Sắt: &f{amount}"
+    - "&6Giá: &e{price}"
+    - "&aDùng để nung lấy sắt"
+  RAW_COPPER:
+    - "&7Đồng Thô: &6{amount}"
+    - "&6Giá: &e{price}"
+  RAW_GOLD:
+    - "&7Quặng Vàng: &e{amount}"
+    - "&6Giá: &e{price}"
+  REDSTONE:
+    - "&7Đá Đỏ dùng để chế tạo máy"
+    - "&cSố lượng: {amount}"
+    - "&6Giá: &e{price}"
+  LAPIS_LAZULI:
+    - "&9Ngọc lưu ly để phù phép"
+    - "&7SL: {amount}"
+    - "&6Giá: &e{price}"
+  EMERALD:
+    - "&aDùng trao đổi với dân làng"
+    - "&aCó: {amount}"
+    - "&6Giá: &e{price}"
+  DIAMOND:
+    - "&bKim cương quý giá!"
+    - "&7Tổng số: {amount}"
+    - "&6Giá: &e{price}"
+  QUARTZ:
+    - "&fThạch anh từ Nether"
+    - "&7Kho: {amount}"
+    - "&6Giá: &e{price}"
+  COBBLESTONE:
+    - "&8Đá cuội dùng xây nhà"
+    - "&7Có trong kho: {amount}"
+    - "&6Giá: &e{price}"
+  STONE:
+    - "&7Đá thường"
+    - "&7Lưu trữ: {amount}"
+    - "&6Giá: &e{price}"
+
+Prices:
+  COAL: 2.5
+  RAW_IRON: 4.0
+  RAW_COPPER: 3.0
+  RAW_GOLD: 5.0
+  REDSTONE: 1.5
+  LAPIS_LAZULI: 2.0
+  EMERALD: 12.0
+  DIAMOND: 15.0
+  QUARTZ: 4.0
+  STONE: 0.5
+  COBBLESTONE: 0.2
+  NETHERITE_SCRAP: 50.0
+  IRON_INGOT: 6.0
+  COPPER_INGOT: 4.5
+  GOLD_INGOT: 7.5
+  EMERALD_BLOCK: 110.0
+  DIAMOND_BLOCK: 135.0
+  IRON_BLOCK: 50.0
+  COAL_BLOCK: 22.0
+  GOLD_BLOCK: 70.0
+  REDSTONE_BLOCK: 13.5
+  LAPIS_BLOCK: 18.0
+
+
+######################################################################
+# 📣 Reload file này bằng /jaostorage reload để áp dụng thay đổi     #
+# 🛡️ Nếu có lỗi YAML, plugin sẽ load config mặc định                #
+######################################################################

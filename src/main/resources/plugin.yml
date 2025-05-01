@@ -1,0 +1,31 @@
+name: JaomcStorage
+version: 1.0
+main: me.kt.jaostorage.Main
+api-version: 1.20
+author: Tài Nguyễn
+description: >
+  Plugin kho lưu trữ nâng cấp cho server Skyblock.
+  Hỗ trợ lưu tự động, bán khoáng sản, chia sẻ kho (coop), nâng cấp không giới hạn và tùy chỉnh sâu.
+
+# 📜 Ghi danh sách các lệnh được plugin hỗ trợ
+commands:
+  kho:
+    description: Quản lý kho của người chơi (nâng cấp, vô hạn, chia sẻ kho)
+    usage: /kho
+    permission: jaostorage.kho
+    permission-message: Bạn không có quyền dùng lệnh này!
+
+  autostore:
+    description: Bật / tắt chế độ tự động lưu kho khi khai thác
+    usage: /autostore
+
+  jaostorage:
+    description: Lệnh quản trị plugin JaomcStorage (reload, debug, v.v.)
+    usage: /jaostorage reload
+    permission: jaostorage.admin
+    permission-message: Bạn không có quyền thực hiện lệnh này!
+
+# 📦 Dependencies có thể khai báo nếu dùng Vault hoặc PlaceholderAPI
+# (Không bắt buộc nếu plugin tự kiểm tra bằng code)
+#depend: [Vault]
+#softdepend: [PlaceholderAPI]
