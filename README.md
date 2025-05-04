@@ -19,7 +19,18 @@
 Plugin giúp người chơi tự động thu thập tài nguyên vào kho, chia sẻ kho với người chơi khác, nâng cấp sức chứa, bán nhanh và tối ưu trải nghiệm thu thập vật phẩm.
 
 ---
+## 🔑 TÍNH NĂNG MỚI
 
+| Tính năng                 | Thực hiện qua        | Trạng thái |
+| ------------------------- | -------------------- | ---------- |
+| Admin thêm item           | Lệnh + GUI           | ✅ Đã xong  |
+| Admin xoá item            | Lệnh + GUI           | ✅ Đã xong  |
+| Mở kho người khác         | Lệnh `/kho open`     | ✅ Đã xong  |
+| Cập nhật dữ liệu lưu      | `StorageManager`     | ✅ Đã xong  |
+| Giao diện và thao tác GUI | `StorageGUIListener` | ✅ Đã xong  |
+| Phân quyền sử dụng        | Permission check     | ✅ Đã xong  |
+
+---
 ## 🔑 TÍNH NĂNG CHÍNH
 
 - ✅ Tự động lưu vật phẩm vào kho khi khai thác (AutoStore).
