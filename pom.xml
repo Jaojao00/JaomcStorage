@@ -1,6 +1,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>me.kt</groupId>
@@ -9,15 +11,15 @@
     <packaging>jar</packaging>
 
     <name>JaomcStorage</name>
-    <description>Plugin Skyblock Storage</description>
+    <description>Skyblock Storage Plugin – Auto Store, Infinite Upgrade, Coop System</description>
 
     <properties>
-        <java.version>17</java.version>
-        <spigot.api.version>1.20.1-R0.1-SNAPSHOT</spigot.api.version>
+        <java.version>17</java.version> <!-- ✅ Đổi từ 21 về 17 -->
+        <spigot.api.version>1.21-R0.1-SNAPSHOT</spigot.api.version>
     </properties>
 
     <dependencies>
-        <!-- Spigot API -->
+        <!-- ✅ Spigot API -->
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
@@ -25,22 +27,22 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- Adventure Platform for Bukkit -->
+        <!-- ✅ Adventure Platform -->
         <dependency>
             <groupId>net.kyori</groupId>
             <artifactId>adventure-platform-bukkit</artifactId>
             <version>4.3.2</version>
         </dependency>
 
-        <!-- Vault API -->
+        <!-- ✅ Vault API -->
         <dependency>
             <groupId>com.github.MilkBowl</groupId>
-            <artifactId>Vault</artifactId>
-            <version>1.7.3</version>
+            <artifactId>VaultAPI</artifactId>
+            <version>1.7</version>
             <scope>provided</scope>
         </dependency>
 
-        <!-- PlaceholderAPI -->
+        <!-- ✅ PlaceholderAPI -->
         <dependency>
             <groupId>com.github.PlaceholderAPI</groupId>
             <artifactId>PlaceholderAPI</artifactId>
@@ -49,20 +51,30 @@
         </dependency>
     </dependencies>
 
+    <repositories>
+        <repository>
+            <id>spigot-repo</id>
+            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+        </repository>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+    </repositories>
+
     <build>
         <plugins>
-            <!-- Build với Java 17 -->
+            <!-- Biên dịch với JDK 17 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.10.1</version>
+                <version>3.11.0</version>
                 <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
+                    <release>${java.version}</release>
                 </configuration>
             </plugin>
 
-            <!-- Đóng gói thư viện vào JAR -->
+            <!-- Shade JAR + relocate Adventure -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
@@ -70,15 +82,17 @@
                 <executions>
                     <execution>
                         <phase>package</phase>
-                        <goals><goal>shade</goal></goals>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
                         <configuration>
+                            <createDependencyReducedPom>false</createDependencyReducedPom>
                             <relocations>
                                 <relocation>
                                     <pattern>net.kyori.adventure</pattern>
                                     <shadedPattern>me.kt.jaostorage.shaded.adventure</shadedPattern>
                                 </relocation>
                             </relocations>
-                            <createDependencyReducedPom>false</createDependencyReducedPom>
                         </configuration>
                     </execution>
                 </executions>
@@ -86,17 +100,4 @@
         </plugins>
     </build>
 
-    <repositories>
-        <!-- Spigot repo -->
-        <repository>
-            <id>spigot-repo</id>
-            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
-        </repository>
-
-        <!-- JitPack repo cho Vault và PlaceholderAPI -->
-        <repository>
-            <id>jitpack.io</id>
-            <url>https://jitpack.io</url>
-        </repository>
-    </repositories>
 </project>
