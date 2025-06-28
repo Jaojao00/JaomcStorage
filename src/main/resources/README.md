@@ -1,7 +1,3 @@
-Dưới đây là bản cập nhật đầy đủ cho tệp `README.md` của plugin **JaomcStorage**, bao gồm sơ đồ plugin và hình ảnh minh họa.
-
----
-
 <p align="center">
   <img src="https://img.shields.io/badge/JaomcStorage-1.0-green?style=for-the-badge&logo=storage" alt="JaomcStorage">
 </p>
@@ -10,7 +6,7 @@ Dưới đây là bản cập nhật đầy đủ cho tệp `README.md` của pl
 <p align="center"><i>Plugin kho nâng cấp cho server Skyblock - phát triển bởi <b>Tài Nguyễn</b></i></p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Minecraft-1.20+-blue?style=flat-square" />
+  <img src="https://img.shields.io/badge/Minecraft-1.21+-blue?style=flat-square" />
   <img src="https://img.shields.io/badge/Plugin--Type-Skyblock--Storage-orange?style=flat-square" />
   <img src="https://img.shields.io/badge/Author-Tài%20Nguyễn-lightgrey?style=flat-square" />
 </p>
@@ -36,6 +32,7 @@ Plugin giúp người chơi tự động thu thập tài nguyên vào kho, chia 
 - ✅ Tuỳ chỉnh sâu với **whitelist** và **blacklist** vật phẩm.
 - ✅ Giao diện GUI thân thiện, dễ sử dụng.
 - ✅ Hỗ trợ PlaceholderAPI (tuỳ chọn).
+- ✅ Tương thích Minecraft **1.21** mới nhất.
 
 ---
 
@@ -53,32 +50,20 @@ Plugin giúp người chơi tự động thu thập tài nguyên vào kho, chia 
 ```yaml
 # ✅ Cấu hình chính cho plugin JaomcStorage
 
-# ✔️ Khi bật, vật phẩm khai thác sẽ chuyển thẳng vào kho
 PickupToStorage: true
-
-# ✔️ Nếu kho đầy, không cho khai thác block nữa
 BlockedMining: true
-
-# ✔️ Chỉ tự lưu khi túi đồ đầy
 OnlyStoreWhenInvFull: false
-
-# ✔️ Hiệu ứng âm thanh khi vật phẩm được đưa vào kho
 PickupSound: ENTITY_ITEM_PICKUP
-
-# ✔️ Hiển thị thông báo dưới dạng ActionBar
 UseActionBar: true
 
-# ✔️ Thế giới không áp dụng tự lưu
 BlacklistWorlds:
   - world_nether
   - world_the_end
 
-# ✔️ Vật phẩm không được lưu vào kho
 Blacklist:
   - DIAMOND_PICKAXE
   - TNT
 
-# ✔️ Vật phẩm được phép lưu (nếu bật whitelist)
 Whitelist:
   - COAL
   - RAW_IRON
@@ -92,7 +77,6 @@ Whitelist:
   - STONE
   - COBBLESTONE
 
-# ✔️ Tên hiển thị tuỳ chỉnh
 FormatName:
   COAL: "&7Than"
   RAW_IRON: "&fQuặng Sắt"
@@ -106,27 +90,19 @@ FormatName:
   COBBLESTONE: "&8Đá Cuội"
   STONE: "&7Đá"
 
-# ✔️ Thiết lập hệ thống tiền tệ
 Economy:
   Provider: VAULT
   Currency: "$"
 
-# ✔️ Dung lượng kho mặc định
 MaxSpace: 100000
-
-# ✔️ Thời gian cập nhật kho tự động (giây)
 AutoUpdateTime: 30
-
-# ✔️ Restart plugin nếu config thay đổi?
 RestartOnChange: false
 
-# ✔️ Log các hành động
 Log:
   Sales: true
   Transfer: true
   Withdraw: true
 
-# ✔️ Giá bán vật phẩm
 Prices:
   COAL: 5
   RAW_IRON: 10
@@ -139,111 +115,3 @@ Prices:
   QUARTZ: 9
   STONE: 2
   COBBLESTONE: 1
-```
-
----
-
-## 🧾 CẤU HÌNH QUẶNG (`guiore.yml`)
-
-```yaml
-ores:
-  - COAL
-  - RAW_IRON
-  - RAW_COPPER
-  - RAW_GOLD
-  - REDSTONE
-  - LAPIS_LAZULI
-  - EMERALD
-  - DIAMOND
-  - QUARTZ
-  - STONE
-  - COBBLESTONE
-```
-
----
-
-## 📜 CÁC LỆNH
-
-| Lệnh                 | Mô tả                           | Quyền              |
-| -------------------- | ------------------------------- | ------------------ |
-| `/kho`               | Mở GUI kho của bạn              | `jaostorage.kho`   |
-| `/autostore`         | Bật / tắt chế độ tự lưu khi đào | *Không cần quyền*  |
-| `/jaostorage reload` | Tải lại file cấu hình plugin    | `jaostorage.admin` |
-
----
-
-## 🔐 PHÂN QUYỀN
-
-```yaml
-jaostorage.kho:
-  description: Quyền mở kho và nâng cấp
-  default: true
-
-jaostorage.admin:
-  description: Quyền quản trị plugin
-  default: op
-```
-
----
-
-## 🧭 SƠ ĐỒ HOẠT ĐỘNG PLUGIN
-
-```plaintext
-                 ┌────────────┐
-                 │   Main     │
-                 └────┬───────┘
-                      │
-   ┌──────────────────┼────────────────────────────┐
-   ▼                  ▼                            ▼
-OreConfig       StorageManager              SettingManager
-   │                  │                            ▲
-   ▼                  ▼                            │
-BlockBreakListener    └─────┐                      │
-AutoStoreListener           ▼                      │
-                            CoopManager            │
-                            │                      │
-                            ▼                      │
-                       StorageGUI ──┐              │
-                            │       ▼              │
-                            └──► StorageGUIListener│
-                                                 ▲
-                                                 │
-                                 ┌───────────────┘
-                                 │
-          ┌──────────────────────┼───────────────────────────┐
-          ▼                      ▼                           ▼
-   AdminCommand       StorageCommand                AutoStoreCommand
-
-```
-
----
-
-## 🖼️ HÌNH ẢNH MINH HỌA
-
-<p align="center">
-  <img src="https://i.imgur.com/YourImageLink.png" alt="Giao diện kho" width="600"/>
-</p>
-
-*Lưu ý: Thay thế `https://i.imgur.com/YourImageLink.png` bằng liên kết hình ảnh thực tế của bạn.*
-
----
-
-## ❤️ BẢN QUYỀN
-
-Plugin JaomcStorage được phát triển bởi Tài Nguyễn – hoàn toàn miễn phí, dành cho cộng đồng Minecraft Việt Nam.  
-Mọi hành vi thương mại hóa không có sự cho phép đều bị nghiêm cấm.  
-Nếu bạn thấy plugin hữu ích, hãy để lại ⭐ trên GitHub để ủng hộ tinh thần phát triển nhé!
-
----
-
-## 📬 LIÊN HỆ & HỖ TRỢ
-
-- Facebook: fb.com/tainguyen.dev
-
-- Email: tainguyen.dev@gmail.com
-
-- Discord: https://discord.gg/jccNvur28z
-
----
-
-**Nếu bạn cần hỗ trợ thêm hoặc muốn tùy chỉnh plugin theo nhu cầu riêng, đừng ngần ngại liên hệ!** 

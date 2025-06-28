@@ -18,15 +18,15 @@ public class StorageGUI {
     private final StorageManager storageManager;
     private final SettingManager settingManager;
     private final FileConfiguration config;
+    private Player player;
 
     public StorageGUI(Main plugin) {
         this.storageManager = plugin.getStorageManager();
-        this.settingManager = new SettingManager(plugin);
-        this.config = plugin.getConfig(); // ✅ Lấy config để đọc tên hiển thị
+        this.settingManager = plugin.getSettingManager(); // ✅ Không khởi tạo mới, lấy từ plugin
+        this.config = plugin.getConfig();
     }
 
-    // ✅ Mở kho giao diện chính
-    public void openStorage(Player player) {
+    public void openStorage() {
         int size = 54;
         Inventory gui = Bukkit.createInventory(null, size, "📦 Khoáng sản của bạn");
 
@@ -62,7 +62,6 @@ public class StorageGUI {
             }
         }
 
-// ✅ Gán ores vào slot và đọc tên + lore từ config
         for (int i = 0; i < itemSlots.size(); i++) {
             if (i >= ores.size()) break;
             int slot = itemSlots.get(i);
@@ -72,15 +71,13 @@ public class StorageGUI {
             ItemStack item = new ItemStack(material);
             ItemMeta itemMeta = item.getItemMeta();
             if (itemMeta != null) {
-                // 📛 Tên hiển thị
                 String displayName = config.getString("FormatName." + material.name(), material.name());
                 itemMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', displayName));
 
-                // 📝 Lore: dùng FormatLore nếu có
                 List<String> lore = new ArrayList<>();
                 List<String> rawLore = config.getStringList("FormatLore." + material.name());
+
                 if (!rawLore.isEmpty()) {
-                    // Giá bán từ Prices
                     double price = config.getDouble("Prices." + material.name(), 0.0);
 
                     for (String line : rawLore) {
@@ -90,7 +87,6 @@ public class StorageGUI {
                         lore.add(ChatColor.translateAlternateColorCodes('&', parsed));
                     }
                 } else {
-                    // Nếu không có FormatLore -> dùng mặc định
                     lore.add("§7Số lượng: " + amount);
                     lore.add("§aNhấn để thao tác");
                 }
@@ -102,8 +98,7 @@ public class StorageGUI {
             gui.setItem(slot, item);
         }
 
-
-        // ✅ Tạo nút BẬT/TẮT AutoStore ở slot 45
+        // 🔘 Nút BẬT/TẮT AutoStore
         boolean autoStore = settingManager.isAutoStoreEnabled(player);
         ItemStack toggleItem = new ItemStack(autoStore ? Material.LIME_DYE : Material.GRAY_DYE);
         ItemMeta toggleMeta = toggleItem.getItemMeta();
@@ -117,7 +112,6 @@ public class StorageGUI {
         player.openInventory(gui);
     }
 
-    // 🟡 Trang trí sau nếu cần
     private ItemStack createGlassPane(String name) {
         ItemStack glass = new ItemStack(Material.GRAY_STAINED_GLASS_PANE);
         ItemMeta meta = glass.getItemMeta();
@@ -128,7 +122,6 @@ public class StorageGUI {
         return glass;
     }
 
-    // ✅ Mở menu thao tác: Rút, Cất, Bán
     public void openItemMenu(Player player, Material material) {
         Inventory menu = Bukkit.createInventory(null, 9, "⚙ " + material.name());
 
@@ -150,9 +143,13 @@ public class StorageGUI {
         return item;
     }
 
-    // ✅ Cho phép gọi mở kho từ nơi khác (ví dụ: /kho)
     public static void open(Player player) {
-        Main plugin = Main.getInstance();
-        new StorageGUI(plugin).openStorage(player);
+        // Cần có cách mở GUI từ một instance của StorageGUI
+        // Không nên để static thế này nếu SettingManager không còn static
+    }
+
+    public void openStorageGUI(Player player, UUID uniqueId) {
+        this.player = player;
+        openStorage();
     }
 }

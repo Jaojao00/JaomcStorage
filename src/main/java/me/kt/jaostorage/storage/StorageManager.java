@@ -12,54 +12,39 @@ import org.bukkit.entity.Player;
 
 public class StorageManager {
 
-    // 🔐 Dữ liệu vật phẩm được lưu theo UUID của người chơi
     private final Map<UUID, Map<Material, Integer>> storageData = new HashMap<>();
-    private final Map<UUID, Map<Material, Integer>> playerStorage = new HashMap<>();
-
-    // 📦 Số slot lưu trữ mở rộng (dành cho nâng cấp dung lượng)
     private final Map<UUID, Integer> storageSlots = new HashMap<>();
-
-    // ♾️ Danh sách người chơi có chế độ kho vô hạn
     private final Set<UUID> infinityMode = new HashSet<>();
-
-    // 🚧 Giới hạn lưu trữ tối đa theo từng người chơi (nâng cấp theo cấp độ)
-    private final Map<UUID, Integer> storageLimit = new HashMap<>();
-
-    // 🔁 Plugin chính, để dùng khi cần truy cập config, file,...
     private final Main plugin;
 
-    // 📁 File YAML lưu dữ liệu
     private File dataFile;
     private FileConfiguration dataConfig;
 
-    // ✅ Constructor nhận plugin chính và load file dữ liệu
     public StorageManager(Main plugin) {
         this.plugin = plugin;
 
-        // 🔄 Tạo file YAML để lưu trữ dữ liệu kho
-        dataFile = new File(plugin.getDataFolder(), "databeas.yml");
+        dataFile = new File(plugin.getDataFolder(), "storage.yml");
         if (!dataFile.exists()) {
             try {
-                dataFile.createNewFile();
+                if (dataFile.createNewFile()) {
+                    plugin.getLogger().info("Đã tạo mới file storage.yml");
+                }
             } catch (IOException e) {
-                e.printStackTrace();
+                plugin.getLogger().warning("Không thể tạo storage.yml: " + e.getMessage());
             }
         }
         dataConfig = YamlConfiguration.loadConfiguration(dataFile);
-
-        loadData(); // 🔁 Tải dữ liệu từ file khi khởi động
+        loadData();
     }
 
-    // ==============================
-    // 📦 PHẦN QUẢN LÝ SLOT LƯU TRỮ
-    // ==============================
-
+    // ========== SLOT LƯU TRỮ ==========
     public void upgradeStorage(Player player, int slots) {
         upgradeStorage(player.getUniqueId(), slots);
     }
 
     public void upgradeStorage(UUID uuid, int slots) {
         storageSlots.put(uuid, getSlots(uuid) + slots);
+        saveData();
     }
 
     public int getSlots(Player player) {
@@ -70,20 +55,15 @@ public class StorageManager {
         return storageSlots.getOrDefault(uuid, 0);
     }
 
-    // ==============================
-    // ♾️ PHẦN QUẢN LÝ KHO VÔ HẠN
-    // ==============================
-
+    // ========== KHO VÔ HẠN ==========
     public void setInfinity(Player player, boolean enabled) {
         setInfinity(player.getUniqueId(), enabled);
     }
 
     public void setInfinity(UUID uuid, boolean enabled) {
-        if (enabled) {
-            infinityMode.add(uuid);
-        } else {
-            infinityMode.remove(uuid);
-        }
+        if (enabled) infinityMode.add(uuid);
+        else infinityMode.remove(uuid);
+        saveData();
     }
 
     public boolean isInfinity(Player player) {
@@ -95,19 +75,12 @@ public class StorageManager {
     }
 
     public boolean toggleInfinity(UUID uuid) {
-        if (infinityMode.contains(uuid)) {
-            infinityMode.remove(uuid);
-            return false;
-        } else {
-            infinityMode.add(uuid);
-            return true;
-        }
+        boolean newState = !infinityMode.contains(uuid);
+        setInfinity(uuid, newState);
+        return newState;
     }
 
-    // ==============================
-    // 📥📤 PHẦN QUẢN LÝ VẬT PHẨM
-    // ==============================
-
+    // ========== LƯU TRỮ VẬT PHẨM ==========
     public int getAmount(Player player, Material material) {
         return getAmount(player.getUniqueId(), material);
     }
@@ -116,16 +89,9 @@ public class StorageManager {
         return storageData.computeIfAbsent(uuid, k -> new HashMap<>()).getOrDefault(material, 0);
     }
 
-    public void setAmount(Player player, Material material, int amount) {
-        setAmount(player.getUniqueId(), material, amount);
-    }
-
     public void setAmount(UUID uuid, Material material, int amount) {
         storageData.computeIfAbsent(uuid, k -> new HashMap<>()).put(material, amount);
-    }
-
-    public void addItem(Player player, Material material, int amount) {
-        addItem(player.getUniqueId(), material, amount);
+        saveData();
     }
 
     public void addItem(UUID uuid, Material material, int amount) {
@@ -133,14 +99,9 @@ public class StorageManager {
         setAmount(uuid, material, current + amount);
     }
 
-    public boolean removeItem(Player player, Material material, int amount) {
-        return removeItem(player.getUniqueId(), material, amount);
-    }
-
     public boolean removeItem(UUID uuid, Material material, int amount) {
         int current = getAmount(uuid, material);
         if (current < amount) return false;
-
         setAmount(uuid, material, current - amount);
         return true;
     }
@@ -150,54 +111,85 @@ public class StorageManager {
     }
 
     public Map<Material, Integer> getStorage(UUID uuid) {
-        return storageData.getOrDefault(uuid, new HashMap<>());
+        return storageData.computeIfAbsent(uuid, k -> new HashMap<>());
     }
 
-    public void addStorageSlots(UUID uuid, int slots) {
-        int current = storageLimit.getOrDefault(uuid, 0);
-        storageLimit.put(uuid, current + slots);
-    }
-
-    // ✅ Dùng để kiểm tra xem loại item đó có được lưu vào kho không
     public boolean isStorable(Material material) {
         return plugin.getOreConfig().getOres().contains(material);
     }
 
-    public boolean hasStorage(UUID uuid) {
-        return playerStorage.containsKey(uuid);
-    }
-
-    // ==============================
-    // 💾 LOAD & SAVE FILE .YML
-    // ==============================
-
+    // ========== LƯU FILE ==========
     public void saveData() {
+        dataConfig.set("data", null);
+        dataConfig.set("slots", null);
+        dataConfig.set("infinity", null);
+
         for (UUID uuid : storageData.keySet()) {
-            for (Material material : storageData.get(uuid).keySet()) {
-                int amount = storageData.get(uuid).get(material);
-                dataConfig.set(uuid.toString() + "." + material.name(), amount);
+            for (Map.Entry<Material, Integer> entry : storageData.get(uuid).entrySet()) {
+                dataConfig.set("data." + uuid + "." + entry.getKey().name(), entry.getValue());
             }
         }
+
+        for (UUID uuid : storageSlots.keySet()) {
+            dataConfig.set("slots." + uuid, storageSlots.get(uuid));
+        }
+
+        List<String> infinityList = new ArrayList<>();
+        for (UUID uuid : infinityMode) {
+            infinityList.add(uuid.toString());
+        }
+        dataConfig.set("infinity", infinityList);
 
         try {
             dataConfig.save(dataFile);
         } catch (IOException e) {
-            e.printStackTrace();
+            plugin.getLogger().warning("Không thể lưu storage.yml: " + e.getMessage());
         }
     }
 
+    // ========== TẢI FILE ==========
     public void loadData() {
-        for (String uuidStr : dataConfig.getKeys(false)) {
-            UUID uuid = UUID.fromString(uuidStr);
-            Map<Material, Integer> items = new HashMap<>();
-            for (String matName : dataConfig.getConfigurationSection(uuidStr).getKeys(false)) {
-                Material mat = Material.getMaterial(matName);
-                int amount = dataConfig.getInt(uuidStr + "." + matName);
-                if (mat != null) {
-                    items.put(mat, amount);
+        if (dataConfig.contains("data")) {
+            for (String uuidStr : dataConfig.getConfigurationSection("data").getKeys(false)) {
+                UUID uuid = UUID.fromString(uuidStr);
+                Map<Material, Integer> items = new HashMap<>();
+                for (String matName : dataConfig.getConfigurationSection("data." + uuidStr).getKeys(false)) {
+                    Material mat = Material.getMaterial(matName);
+                    int amount = dataConfig.getInt("data." + uuidStr + "." + matName);
+                    if (mat != null) items.put(mat, amount);
                 }
+                storageData.put(uuid, items);
             }
-            storageData.put(uuid, items);
+        }
+
+        if (dataConfig.contains("slots")) {
+            for (String uuidStr : dataConfig.getConfigurationSection("slots").getKeys(false)) {
+                UUID uuid = UUID.fromString(uuidStr);
+                int slots = dataConfig.getInt("slots." + uuidStr);
+                storageSlots.put(uuid, slots);
+            }
+        }
+
+        if (dataConfig.contains("infinity")) {
+            for (String uuidStr : dataConfig.getStringList("infinity")) {
+                infinityMode.add(UUID.fromString(uuidStr));
+            }
+        }
+    }
+
+    public void addItemToPlayerStorage(UUID uniqueId, Material mat, int amount) {
+        if (isStorable(mat)) {
+            addItem(uniqueId, mat, amount);
+        } else {
+            plugin.getLogger().warning("Vật phẩm " + mat.name() + " không thể lưu trữ.");
+        }
+    }
+
+    public void removeItemFromPlayerStorage(UUID uniqueId, Material mat, int amount) {
+        if (isStorable(mat)) {
+            removeItem(uniqueId, mat, amount);
+        } else {
+            plugin.getLogger().warning("Vật phẩm " + mat.name() + " không thể lưu trữ.");
         }
     }
 }

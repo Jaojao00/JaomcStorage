@@ -4,28 +4,44 @@ main: me.kt.jaostorage.Main
 api-version: 1.20
 author: Tài Nguyễn
 description: >
-  Plugin kho lưu trữ nâng cấp cho server Skyblock.
-  Hỗ trợ lưu tự động, bán khoáng sản, chia sẻ kho (coop), nâng cấp không giới hạn và tùy chỉnh sâu.
+  Plugin lưu trữ khoáng sản nâng cấp dành cho server Skyblock.
+  Hỗ trợ tự động lưu khoáng sản khi khai thác, chia sẻ kho (coop),
+  nâng cấp slot, bán tài nguyên, và tuỳ chỉnh chuyên sâu.
 
-# 📜 Ghi danh sách các lệnh được plugin hỗ trợ
 commands:
   kho:
-    description: Quản lý kho của người chơi (nâng cấp, vô hạn, chia sẻ kho)
+    description: Quản lý kho của người chơi (mở, nâng cấp, chia sẻ)
     usage: /kho
     permission: jaostorage.kho
-    permission-message: Bạn không có quyền dùng lệnh này!
+    permission-message: §cBạn không có quyền dùng lệnh này!
 
   autostore:
-    description: Bật / tắt chế độ tự động lưu kho khi khai thác
+    description: Bật / tắt chế độ tự động lưu vật phẩm khi khai thác
     usage: /autostore
+    permission: jaostorage.autostore
+    permission-message: §cBạn không có quyền dùng lệnh này!
 
   jaostorage:
-    description: Lệnh quản trị plugin JaomcStorage (reload, debug, v.v.)
+    description: Lệnh quản trị plugin JaomcStorage (reload, debug)
     usage: /jaostorage reload
     permission: jaostorage.admin
-    permission-message: Bạn không có quyền thực hiện lệnh này!
+    permission-message: §cBạn không có quyền thực hiện lệnh này!
 
-# 📦 Dependencies có thể khai báo nếu dùng Vault hoặc PlaceholderAPI
-# (Không bắt buộc nếu plugin tự kiểm tra bằng code)
-#depend: [Vault]
-#softdepend: [PlaceholderAPI]
+permissions:
+  jaostorage.kho:
+    description: Quyền truy cập kho cá nhân
+    default: true
+
+  jaostorage.autostore:
+    description: Quyền bật chế độ auto-store
+    default: true
+
+  jaostorage.admin:
+    description: Quyền quản trị toàn bộ plugin
+    default: op
+
+depend:
+  - Vault
+
+softdepend:
+  - PlaceholderAPI

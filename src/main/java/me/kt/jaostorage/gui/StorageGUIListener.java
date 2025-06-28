@@ -13,6 +13,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class StorageGUIListener implements Listener {
 
@@ -20,7 +21,6 @@ public class StorageGUIListener implements Listener {
     private final StorageManager storageManager;
     private final StorageGUI storageGUI;
 
-    // Dùng để tạm lưu trạng thái chờ nhập liệu từ chat
     private final Map<Player, ActionContext> chatWaiting = new HashMap<>();
 
     public StorageGUIListener(Main plugin) {
@@ -29,32 +29,37 @@ public class StorageGUIListener implements Listener {
         this.storageGUI = plugin.getStorageGUI();
     }
 
-    // 🎯 Khi người chơi click vào vật phẩm trong kho
     @EventHandler
     public void onInventoryClick(InventoryClickEvent e) {
         Player player = (Player) e.getWhoClicked();
+        UUID uuid = player.getUniqueId();
 
-        // Chỉ xử lý GUI liên quan kho
         String title = e.getView().getTitle();
         if (!title.contains("Khoáng sản") && !title.contains("⚙")) return;
 
-        // Huỷ thao tác mặc định (ngăn lấy vật phẩm ra)
         e.setCancelled(true);
 
-        // Bỏ qua nếu không có vật phẩm
         if (e.getClickedInventory() == null || e.getCurrentItem() == null) return;
 
-        // Bỏ qua nếu là kính viền
         Material clickedType = e.getCurrentItem().getType();
         if (clickedType.name().contains("GLASS_PANE")) return;
 
-        // 👉 Nếu đang ở GUI chính (danh sách khoáng sản)
         if (title.contains("Khoáng sản")) {
-            storageGUI.openItemMenu(player, clickedType);
+            int rawSlot = e.getRawSlot();
+            if (rawSlot == 45) {
+                // 🔘 Bật/tắt AutoStore
+                boolean current = plugin.getSettingManager().isAutoStoreEnabled(player);
+                plugin.getSettingManager().setAutoStore(player, !current);
+                player.sendMessage("⚙ Đã " + (current ? "§ctắt" : "§abật") + " chức năng Tự động lưu kho.");
+                player.closeInventory();
+                Bukkit.getScheduler().runTaskLater(plugin, () ->
+                        storageGUI.openStorageGUI(player, player.getUniqueId()), 1L);
+            } else {
+                storageGUI.openItemMenu(player, clickedType);
+            }
             return;
         }
 
-        // 👉 Nếu đang ở GUI thao tác (⚙ loại khoáng sản)
         if (title.contains("⚙")) {
             String displayName = e.getCurrentItem().getItemMeta() != null
                     ? e.getCurrentItem().getItemMeta().getDisplayName()
@@ -79,9 +84,9 @@ public class StorageGUIListener implements Listener {
                 chatWaiting.put(player, new ActionContext(material, ActionType.WITHDRAW));
 
             } else if (displayName.contains("Bán")) {
-                int amount = storageManager.getAmount(player, material);
+                int amount = storageManager.getAmount(uuid, material);
                 if (amount > 0) {
-                    storageManager.setAmount(player, material, 0);
+                    storageManager.setAmount(uuid, material, 0);
                     player.sendMessage("💰 Đã bán toàn bộ " + material.name() + " với số lượng " + amount);
                 } else {
                     player.sendMessage("❌ Không có " + material.name() + " trong kho!");
@@ -91,10 +96,10 @@ public class StorageGUIListener implements Listener {
         }
     }
 
-    // 🧾 Xử lý khi người chơi nhập số lượng từ chat
     @EventHandler
     public void onChat(AsyncPlayerChatEvent e) {
         Player player = e.getPlayer();
+        UUID uuid = player.getUniqueId();
         if (!chatWaiting.containsKey(player)) return;
 
         e.setCancelled(true);
@@ -107,7 +112,7 @@ public class StorageGUIListener implements Listener {
                 amount = (int) player.getInventory().all(context.material).values().stream()
                         .mapToInt(ItemStack::getAmount).sum();
             } else {
-                amount = storageManager.getAmount(player, context.material);
+                amount = storageManager.getAmount(uuid, context.material);
             }
         } else {
             try {
@@ -121,8 +126,6 @@ public class StorageGUIListener implements Listener {
 
         Bukkit.getScheduler().runTask(plugin, () -> {
             if (context.action == ActionType.STORE) {
-
-                // ✅ Tính tổng số lượng vật phẩm trong túi
                 int totalAvailable = 0;
                 for (ItemStack item : player.getInventory().getContents()) {
                     if (item != null && item.getType() == context.material) {
@@ -130,13 +133,11 @@ public class StorageGUIListener implements Listener {
                     }
                 }
 
-                // ❌ Nếu không có vật phẩm để cất
                 if (totalAvailable == 0) {
-                    player.sendMessage("❌ Bạn không có vật phẩm " + context.material.name() + " trong túi để cất!");
+                    player.sendMessage("❌ Bạn không có " + context.material.name() + " trong túi để cất!");
                     return;
                 }
 
-                // 📦 Cất tối đa bằng số lượng có trong túi
                 int toStore = Math.min(amount, totalAvailable);
                 int remaining = toStore;
 
@@ -156,18 +157,17 @@ public class StorageGUIListener implements Listener {
                     if (remaining <= 0) break;
                 }
 
-                storageManager.addItem(player, context.material, toStore);
+                // ✅ Dùng method chính xác có lưu data
+                storageManager.addItem(uuid, context.material, toStore);
                 player.sendMessage("📦 Đã cất " + toStore + " " + context.material.name() + " vào kho.");
 
             } else {
-                // ✅ Rút vật phẩm: chỉ rút vừa đủ inventory
-                int storedAmount = storageManager.getAmount(player, context.material);
+                int storedAmount = storageManager.getAmount(uuid, context.material);
                 if (storedAmount <= 0) {
                     player.sendMessage("❌ Không có " + context.material.name() + " trong kho!");
                     return;
                 }
 
-                // 🔍 Tính số slot trống
                 int emptySlots = 0;
                 for (ItemStack item : player.getInventory().getStorageContents()) {
                     if (item == null || item.getType() == Material.AIR) emptySlots++;
@@ -183,22 +183,21 @@ public class StorageGUIListener implements Listener {
 
                 int withdrawAmount = Math.min(amount, Math.min(storedAmount, maxWithdrawable));
 
-                boolean success = storageManager.removeItem(player, context.material, withdrawAmount);
+                boolean success = storageManager.removeItem(uuid, context.material, withdrawAmount);
                 if (success) {
                     while (withdrawAmount > 0) {
                         int toGive = Math.min(withdrawAmount, maxStackSize);
                         player.getInventory().addItem(new ItemStack(context.material, toGive));
                         withdrawAmount -= toGive;
                     }
-                    player.sendMessage("📤 Đã rút vật phẩm từ kho vào túi (vừa đủ túi đồ).");
+                    player.sendMessage("📤 Đã rút " + amount + " " + context.material.name() + " từ kho.");
                 } else {
-                    player.sendMessage("❌ Không đủ " + context.material.name() + " để rút!");
+                    player.sendMessage("❌ Không đủ vật phẩm để rút!");
                 }
             }
         });
     }
 
-    // 🧠 Enum & Context phụ trợ
     enum ActionType { STORE, WITHDRAW }
 
     class ActionContext {
