@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://img.shields.io/badge/JaomcStorage-1.0-green?style=for-the-badge&logo=storage" alt="JaomcStorage">
+  <img src="https://img.shields.io/badge/JaomcStorage-2.0-green?style=for-the-badge&logo=storage" alt="JaomcStorage">
 </p>
 
 <h1 align="center">💎 JaomcStorage</h1>
