@@ -18,6 +18,12 @@
 **JaomcStorage** là plugin quản lý kho lưu trữ nâng cao dành cho **máy chủ Skyblock** hoặc các server PvE.  
 Plugin giúp người chơi tự động thu thập tài nguyên vào kho, chia sẻ kho với người chơi khác, nâng cấp sức chứa, bán nhanh và tối ưu trải nghiệm thu thập vật phẩm.
 
+
+## 🧰 DESCRIPTION
+
+**JaomcStorage** is an advanced storage management plugin for **Skyblock servers** or PvE servers.
+The plugin helps players automatically collect resources into storage, share storage with other players, upgrade capacity, sell quickly and optimize the item collection experience.
+
 ---
 
 ## 🔑 TÍNH NĂNG CHÍNH
@@ -57,6 +63,16 @@ Plugin giúp người chơi tự động thu thập tài nguyên vào kho, chia 
 3. Tuỳ chỉnh file `config.yml`, `guiore.yml` theo nhu cầu.
 4. Reload lại plugin bằng lệnh: `/jaostorage reload`
 
+
+## 📥 INSTALLATION
+
+1. Download the `JaomcStorage.jar` file and put it in the `plugins/` folder.
+
+2. Start the server so that the plugin can automatically create a configuration file.
+
+3. Customize the `config.yml`, `guiore.yml` files as needed.
+
+4. Reload the plugin with the command: `/jaostorage reload`
 ---
 
 ## 📁 CẤU HÌNH CHÍNH (`config.yml`)
