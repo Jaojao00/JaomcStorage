@@ -36,6 +36,20 @@ Plugin giúp người chơi tự động thu thập tài nguyên vào kho, chia 
 
 ---
 
+## 🔑 MAIN FEATURES
+
+- ✅ Automatically save items to the warehouse when mining (AutoStore).
+- ✅ Warehouse capacity limit & flexible upgrade system.
+- ✅ Unlimited warehouse for VIP players or configuration.
+- ✅ Quickly sell resources from the warehouse (Vault economy supported).
+- ✅ **warehouse sharing (Coop)** system between multiple players.
+- ✅ Block block breaking if the warehouse is full (BlockedMining).
+- ✅ Sound effects when items are collected into the warehouse.
+- ✅ Deep customization with **whitelist** and **blacklist** items.
+- ✅ Friendly GUI interface, easy to use.
+- ✅ PlaceholderAPI support (optional).
+- ✅ Compatible with the latest Minecraft **1.21**.
+
 ## 📥 CÀI ĐẶT
 
 1. Tải file `JaomcStorage.jar` và đưa vào thư mục `plugins/`.
