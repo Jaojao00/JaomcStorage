@@ -2,7 +2,7 @@
   <img src="https://img.shields.io/badge/JaomcStorage-2.0-green?style=for-the-badge&logo=storage" alt="JaomcStorage">
 </p>
 
-<h1 align="center">💎 JaomcStorage</h1>
+<h1 align="center">💎 JaomcStorage-2.0</h1>
 <p align="center"><i>Plugin kho nâng cấp cho server Skyblock - phát triển bởi <b>Tài Nguyễn</b></i></p>
 
 <p align="center">
