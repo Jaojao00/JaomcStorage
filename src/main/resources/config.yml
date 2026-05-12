@@ -1,34 +1,45 @@
 ######################################################################
-# 📦 JAOMCSTORAGE - CONFIGURATION FILE                               #
+# 📦 JAOMCSTORAGE 2.0 - CONFIGURATION FILE                          #
 # ✍️ Developed by Tài Nguyễn (c) 2025                                #
+# 💾 Database: SQLite | Economy: Vault                               #
 ######################################################################
+
+# =====================================================================
+# ⚙️ CÀI ĐẶT CHÍNH
+# =====================================================================
 
 # ✅ Tự động lưu vật phẩm khai thác vào kho người chơi
 PickupToStorage: true
 
-# ⛔ Nếu kho đầy thì không cho khai thác block
+# ⛔ Chặn khai thác block nếu kho đầy (người chơi không thể đào nếu hết dung lượng)
 BlockedMining: true
 
-# 🎒 Chỉ lưu vào kho nếu túi đồ đã đầy
+# 🎒 Chỉ lưu vào kho nếu túi đồ đã đầy (false = luôn lưu vào kho)
 OnlyStoreWhenInvFull: false
 
-# 🔊 Âm thanh khi thêm vật phẩm vào kho
+# 🔊 Âm thanh khi thêm vật phẩm vào kho (để trống để tắt)
 PickupSound: ENTITY_ITEM_PICKUP
 
-# 📣 Hiện thông báo hành động dưới dạng ActionBar (thanh nhỏ ở dưới)
-UseActionBar: true  # ✅ Mới thêm
+# 📣 Hiện thông báo ActionBar khi thu vật phẩm
+UseActionBar: true
 
-# 🌍 Thế giới KHÔNG áp dụng tính năng
+# =====================================================================
+# 🌍 BLACKLIST THẾ GIỚI - Thế giới KHÔNG áp dụng AutoStore
+# =====================================================================
 BlacklistWorlds:
   - world_nether
   - world_the_end
 
-# 🚫 Vật phẩm KHÔNG được tự lưu vào kho
+# =====================================================================
+# 🚫 BLACKLIST VẬT PHẨM - Không tự động lưu vào kho
+# =====================================================================
 Blacklist:
   - DIAMOND_PICKAXE
   - TNT
 
-# ✅ Danh sách **vật phẩm** được phép lưu nếu bật whitelist
+# =====================================================================
+# ✅ WHITELIST VẬT PHẨM - Chỉ lưu các vật phẩm này (bỏ trống = lưu tất cả)
+# =====================================================================
 Whitelist:
   - COAL
   - RAW_IRON
@@ -40,9 +51,16 @@ Whitelist:
   - DIAMOND
   - QUARTZ
   - STONE
-  - COBBLESTONE  # đá cuội cũng được lưu
+  - COBBLESTONE
+  - GOLD_NUGGET
+  - IRON_INGOT
+  - COPPER_INGOT
+  - GOLD_INGOT
+  - NETHERITE_SCRAP
 
-# 🏷️ Tên hiển thị vật phẩm trong kho (giao diện GUI)
+# =====================================================================
+# 🏷️ TÊN HIỂN THỊ - Tên tiếng Việt trong GUI
+# =====================================================================
 FormatName:
   COAL: "&7Than"
   RAW_IRON: "&fQuặng Sắt"
@@ -55,28 +73,15 @@ FormatName:
   QUARTZ: "&fThạch Anh"
   COBBLESTONE: "&8Đá Cuội"
   STONE: "&7Đá"
+  GOLD_NUGGET: "&6Mảnh Vàng"
+  IRON_INGOT: "&fThỏi Sắt"
+  COPPER_INGOT: "&6Thỏi Đồng"
+  GOLD_INGOT: "&eThỏi Vàng"
+  NETHERITE_SCRAP: "&4Mảnh Netherite"
 
-# 💰 Cấu hình tiền tệ (khi bán vật phẩm)
-Economy:
-  Provider: VAULT
-  Currency: "$"
-
-# 📦 Dung lượng mặc định cho mỗi người chơi
-MaxSpace: 100000
-
-# 🔁 Cập nhật dữ liệu kho tự động mỗi X giây
-AutoUpdateTime: 30
-
-# 🔄 Tự restart plugin khi config thay đổi?
-RestartOnChange: false
-
-# 📜 Ghi nhật ký hành động (cho admin / debug)
-Log:
-  Sales: true
-  Transfer: true
-  Withdraw: true
-
-# 📝 Mô tả nhiều dòng trong lore khi hiển thị trong kho
+# =====================================================================
+# 📝 LORE HIỂN THỊ - Mô tả trong GUI (hỗ trợ {amount} và {price})
+# =====================================================================
 FormatLore:
   COAL:
     - "&7Bạn đang có &8{amount} viên than"
@@ -121,6 +126,23 @@ FormatLore:
     - "&7Lưu trữ: {amount}"
     - "&6Giá: &e{price}"
 
+# =====================================================================
+# 💰 ECONOMY - Cấu hình tiền tệ (Vault)
+# =====================================================================
+Economy:
+  Provider: VAULT
+  Currency: "$"
+
+# =====================================================================
+# 📦 DUNG LƯỢNG KHO
+# =====================================================================
+
+# Dung lượng mặc định (tổng tất cả vật phẩm)
+MaxSpace: 100000
+
+# =====================================================================
+# 💲 BẢNG GIÁ BÁN VẬT PHẨM
+# =====================================================================
 Prices:
   COAL: 2.5
   RAW_IRON: 4.0
@@ -133,6 +155,7 @@ Prices:
   QUARTZ: 4.0
   STONE: 0.5
   COBBLESTONE: 0.2
+  GOLD_NUGGET: 0.5
   NETHERITE_SCRAP: 50.0
   IRON_INGOT: 6.0
   COPPER_INGOT: 4.5
@@ -145,8 +168,23 @@ Prices:
   REDSTONE_BLOCK: 13.5
   LAPIS_BLOCK: 18.0
 
+# =====================================================================
+# 💾 DATABASE & AUTO SAVE
+# =====================================================================
+
+# Tự động lưu dữ liệu mỗi X giây (async, không gây lag)
+AutoSaveInterval: 60
+
+# =====================================================================
+# 📜 LOG - Ghi nhật ký hành động
+# =====================================================================
+Log:
+  Sales: true
+  Transfer: true
+  Withdraw: true
+  RetentionDays: 30    # Tự động xóa log cũ hơn X ngày
 
 ######################################################################
-# 📣 Reload file này bằng /jaostorage reload để áp dụng thay đổi     #
+# 📣 Reload bằng /jaostorage reload để áp dụng thay đổi              #
 # 🛡️ Nếu có lỗi YAML, plugin sẽ load config mặc định                #
 ######################################################################
