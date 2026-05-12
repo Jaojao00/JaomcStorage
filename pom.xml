@@ -7,15 +7,16 @@
 
     <groupId>me.kt</groupId>
     <artifactId>jaostorage</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>2.0</version>
     <packaging>jar</packaging>
 
     <name>JaomcStorage</name>
-    <description>Skyblock Storage Plugin – Auto Store, Infinite Upgrade, Coop System</description>
+    <description>Skyblock Storage Plugin 2.0 – Auto Store, SQLite, Coop, Vault Economy</description>
 
     <properties>
-        <java.version>17</java.version> <!-- ✅ Đổi từ 21 về 17 -->
+        <java.version>17</java.version>
         <spigot.api.version>1.21-R0.1-SNAPSHOT</spigot.api.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <dependencies>
@@ -27,14 +28,7 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- ✅ Adventure Platform -->
-        <dependency>
-            <groupId>net.kyori</groupId>
-            <artifactId>adventure-platform-bukkit</artifactId>
-            <version>4.3.2</version>
-        </dependency>
-
-        <!-- ✅ Vault API -->
+        <!-- ✅ Vault API (Economy) -->
         <dependency>
             <groupId>com.github.MilkBowl</groupId>
             <artifactId>VaultAPI</artifactId>
@@ -74,28 +68,18 @@
                 </configuration>
             </plugin>
 
-            <!-- Shade JAR + relocate Adventure -->
+            <!-- Đóng gói JAR -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>3.4.1</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                        <configuration>
-                            <createDependencyReducedPom>false</createDependencyReducedPom>
-                            <relocations>
-                                <relocation>
-                                    <pattern>net.kyori.adventure</pattern>
-                                    <shadedPattern>me.kt.jaostorage.shaded.adventure</shadedPattern>
-                                </relocation>
-                            </relocations>
-                        </configuration>
-                    </execution>
-                </executions>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.3.0</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                        </manifest>
+                    </archive>
+                </configuration>
             </plugin>
         </plugins>
     </build>
