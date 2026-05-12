@@ -1,0 +1,22 @@
+# Danh sách các loại block hoặc item sẽ được lưu vào kho khi khai thác
+
+ores:
+  - COAL_ORE
+  - IRON_ORE
+  - COPPER_ORE
+  - GOLD_ORE
+  - REDSTONE_ORE
+  - LAPIS_ORE
+  - EMERALD_ORE
+  - DIAMOND_ORE
+  - NETHER_QUARTZ_ORE
+  - STONE
+
+  # Các item thành phẩm (được hỗ trợ để thêm trực tiếp vào kho nếu cần)
+  - IRON_INGOT
+  - GOLD_INGOT
+  - DIAMOND
+  - EMERALD
+  - REDSTONE
+  - LAPIS_LAZULI
+  - NETHER_QUARTZ
