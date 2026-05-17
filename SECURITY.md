@@ -44,7 +44,7 @@ We take security issues seriously. If you discover a vulnerability in JaomcStora
 
 ### ✅ DO
 
-1. **Email us directly** at: `taidevnguyen.security@gmail.com`
+1. **Email us directly** at: `tainguyenhr.dev@gmail.com`
 2. **Include the following details:**
    - Description of the vulnerability
    - Steps to reproduce the issue
