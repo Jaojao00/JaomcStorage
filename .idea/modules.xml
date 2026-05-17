@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/jaostorage.iml" filepath="$PROJECT_DIR$/jaostorage.iml" />
       <module fileurl="file://$PROJECT_DIR$/jaostoragemc.iml" filepath="$PROJECT_DIR$/jaostoragemc.iml" />
     </modules>
   </component>

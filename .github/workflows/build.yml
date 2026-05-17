@@ -1,0 +1,44 @@
+name: 🔨 Build & Attest JaomcStorage
+
+on:
+  push:
+    branches: [ main, master ]
+    tags: [ 'v*' ]
+  pull_request:
+    branches: [ main, master ]
+
+permissions:
+  id-token: write
+  contents: read
+  attestations: write
+
+jobs:
+  build:
+    name: 🏗️ Build JAR
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+
+      - name: ☕ Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: 📦 Build with Maven
+        run: mvn clean package -B --no-transfer-progress
+
+      - name: 📤 Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: jaostorage-jar
+          path: target/jaostorage-*.jar
+          retention-days: 30
+
+      - name: Tài Dev Nguyễn
+        uses: actions/attest-build-provenance@v4.1.0
+        with:
+          subject-path: target/jaostorage-*.jar

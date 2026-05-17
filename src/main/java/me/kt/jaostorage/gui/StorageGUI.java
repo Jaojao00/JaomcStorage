@@ -26,30 +26,28 @@ public class StorageGUI {
 
     // ═══════ DESIGN CONSTANTS ═══════
     // Gradient border slots (outer ring)
-    private static final int[] CORNER_SLOTS = {0, 8, 45, 53};
-    private static final int[] TOP_BOTTOM_EDGE = {1,2,3,4,5,6,7, 46,47,48,49,50,51,52};
-    private static final int[] SIDE_EDGE = {9, 17, 18, 26, 27, 35, 36, 44};
+    private static final int[] CORNER_SLOTS = { 0, 8, 45, 53 };
+    private static final int[] TOP_BOTTOM_EDGE = { 1, 2, 3, 4, 5, 6, 7, 46, 47, 48, 49, 50, 51, 52 };
+    private static final int[] SIDE_EDGE = { 9, 17, 18, 26, 27, 35, 36, 44 };
 
     // Item display slots (3 rows x 7 cols centered)
     private static final List<Integer> ITEM_SLOTS = Arrays.asList(
-        10, 11, 12, 13, 14, 15, 16,
-        19, 20, 21, 22, 23, 24, 25,
-        28, 29, 30, 31, 32, 33, 34
-    );
+            10, 11, 12, 13, 14, 15, 16,
+            19, 20, 21, 22, 23, 24, 25,
+            28, 29, 30, 31, 32, 33, 34);
 
     // Separator row
-    private static final int[] SEPARATOR_SLOTS = {37, 38, 39, 40, 41, 42, 43};
+    private static final int[] SEPARATOR_SLOTS = { 37, 38, 39, 40, 41, 42, 43 };
 
     // Ores to display
     private static final List<Material> DISPLAY_ORES = Arrays.asList(
-        Material.COAL, Material.RAW_IRON, Material.RAW_COPPER,
-        Material.RAW_GOLD, Material.REDSTONE, Material.LAPIS_LAZULI,
-        Material.EMERALD, Material.DIAMOND, Material.QUARTZ,
-        Material.COBBLESTONE, Material.STONE, Material.GOLD_NUGGET,
-        Material.IRON_INGOT, Material.COPPER_INGOT, Material.GOLD_INGOT,
-        Material.NETHERITE_SCRAP, Material.EMERALD_BLOCK, Material.DIAMOND_BLOCK,
-        Material.IRON_BLOCK, Material.COAL_BLOCK, Material.GOLD_BLOCK
-    );
+            Material.COAL, Material.RAW_IRON, Material.RAW_COPPER,
+            Material.RAW_GOLD, Material.REDSTONE, Material.LAPIS_LAZULI,
+            Material.EMERALD, Material.DIAMOND, Material.QUARTZ,
+            Material.COBBLESTONE, Material.STONE, Material.GOLD_NUGGET,
+            Material.IRON_INGOT, Material.COPPER_INGOT, Material.GOLD_INGOT,
+            Material.NETHERITE_SCRAP, Material.EMERALD_BLOCK, Material.DIAMOND_BLOCK,
+            Material.IRON_BLOCK, Material.COAL_BLOCK, Material.GOLD_BLOCK);
 
     // Rarity colors for items
     private static final Map<Material, String> RARITY = new LinkedHashMap<>();
@@ -73,18 +71,17 @@ public class StorageGUI {
     }
 
     // ═══════════════════════════════════════════════
-    //  📦 MAIN STORAGE GUI
+    // 📦 MAIN STORAGE GUI
     // ═══════════════════════════════════════════════
 
     public void openStorageGUI(Player viewer, UUID targetUUID) {
         StorageHolder holder = new StorageHolder(
-            viewer.getUniqueId(), targetUUID, StorageHolder.GUIType.MAIN_STORAGE
-        );
+                viewer.getUniqueId(), targetUUID, StorageHolder.GUIType.MAIN_STORAGE);
 
         boolean isOwn = viewer.getUniqueId().equals(targetUUID);
         String title = isOwn
-            ? "§8┃ §6§l⛏ KHO KHOÁNG SẢN §8┃"
-            : "§8┃ §6§l⛏ Kho của §e" + getPlayerName(targetUUID) + " §8┃";
+                ? "§8┃ §6§l⛏ KHO KHOÁNG SẢN §8┃"
+                : "§8┃ §6§l⛏ Kho của §e" + getPlayerName(targetUUID) + " §8┃";
 
         Inventory gui = Bukkit.createInventory(holder, 54, title);
         Map<Material, Integer> storage = storageManager.getStorage(targetUUID);
@@ -94,7 +91,8 @@ public class StorageGUI {
 
         // ─── Separator Row (row 5) ───
         ItemStack sepGlass = createGlass(Material.CYAN_STAINED_GLASS_PANE, "§8§m─────────────────");
-        for (int s : SEPARATOR_SLOTS) gui.setItem(s, sepGlass);
+        for (int s : SEPARATOR_SLOTS)
+            gui.setItem(s, sepGlass);
 
         // ─── Item Display ───
         for (int i = 0; i < ITEM_SLOTS.size() && i < DISPLAY_ORES.size(); i++) {
@@ -120,22 +118,20 @@ public class StorageGUI {
 
         // Slot 53: Close
         gui.setItem(53, createButton(Material.BARRIER,
-            "§c§l✖ §cĐóng",
-            Arrays.asList("§8§m                    ", "§7Click để đóng kho", "§8§m                    ")
-        ));
+                "§c§l✖ §cĐóng",
+                Arrays.asList("§8§m                    ", "§7Click để đóng kho", "§8§m                    ")));
 
         viewer.openInventory(gui);
     }
 
     // ═══════════════════════════════════════════════
-    //  ⚙ ITEM ACTION MENU
+    // ⚙ ITEM ACTION MENU
     // ═══════════════════════════════════════════════
 
     public void openItemMenu(Player viewer, UUID targetUUID, Material material) {
         StorageHolder holder = new StorageHolder(
-            viewer.getUniqueId(), targetUUID,
-            StorageHolder.GUIType.ITEM_MENU, material.name()
-        );
+                viewer.getUniqueId(), targetUUID,
+                StorageHolder.GUIType.ITEM_MENU, material.name());
 
         int amount = storageManager.getAmount(targetUUID, material);
         String displayName = getDisplayName(material);
@@ -144,15 +140,16 @@ public class StorageGUI {
         String rarity = RARITY.getOrDefault(material, "§7✦ COMMON");
 
         Inventory menu = Bukkit.createInventory(holder, 27,
-            "§8┃ §e§l⚙ " + ChatColor.stripColor(MessageUtil.color(displayName)) + " §8┃");
+                "§8┃ §e§l⚙ " + ChatColor.stripColor(MessageUtil.color(displayName)) + " §8┃");
 
         // Fill background
         ItemStack bg = createGlass(Material.GRAY_STAINED_GLASS_PANE, " ");
-        for (int i = 0; i < 27; i++) menu.setItem(i, bg);
+        for (int i = 0; i < 27; i++)
+            menu.setItem(i, bg);
 
         // Decorative top/bottom
         ItemStack accent = createGlass(Material.YELLOW_STAINED_GLASS_PANE, " ");
-        for (int i : new int[]{0,1,2,3,4,5,6,7,8, 18,19,20,21,22,23,24,25,26}) {
+        for (int i : new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 18, 19, 20, 21, 22, 23, 24, 25, 26 }) {
             menu.setItem(i, accent);
         }
 
@@ -162,105 +159,95 @@ public class StorageGUI {
         if (infoMeta != null) {
             infoMeta.setDisplayName(MessageUtil.color(getDisplayName(material)));
             infoMeta.setLore(Arrays.asList(
-                "§8§m                         ",
-                rarity,
-                "",
-                "§8  ▪ §7Trong kho: §f§l" + MessageUtil.formatNumber(amount),
-                "§8  ▪ §7Giá bán:   §e" + MessageUtil.formatNumber(price) + currency + "§7/cái",
-                "§8  ▪ §7Tổng giá:  §6" + MessageUtil.formatNumber(price * amount) + currency,
-                "",
-                "§8§m                         "
-            ));
+                    "§8§m                         ",
+                    rarity,
+                    "",
+                    "§8  ▪ §7Trong kho: §f§l" + MessageUtil.formatNumber(amount),
+                    "§8  ▪ §7Giá bán:   §e" + MessageUtil.formatNumber(price) + currency + "§7/cái",
+                    "§8  ▪ §7Tổng giá:  §6" + MessageUtil.formatNumber(price * amount) + currency,
+                    "",
+                    "§8§m                         "));
             infoItem.setItemMeta(infoMeta);
         }
         menu.setItem(13, infoItem);
 
         // Store button (slot 10)
         menu.setItem(10, createButton(Material.CHEST,
-            "§a§l📥 CẤT VÀO KHO",
-            Arrays.asList(
-                "§8§m                    ",
-                "§7Chuyển vật phẩm từ",
-                "§7túi đồ vào kho lưu trữ",
-                "",
-                "§a  ▸ §fClick §7rồi nhập số",
-                "§a  ▸ §fGõ 'all' §7để cất hết",
-                "§a  ▸ §fGõ 'cancel' §7để hủy",
-                "§8§m                    "
-            )
-        ));
+                "§a§l📥 CẤT VÀO KHO",
+                Arrays.asList(
+                        "§8§m                    ",
+                        "§7Chuyển vật phẩm từ",
+                        "§7túi đồ vào kho lưu trữ",
+                        "",
+                        "§a  ▸ §fClick §7rồi nhập số",
+                        "§a  ▸ §fGõ 'all' §7để cất hết",
+                        "§a  ▸ §fGõ 'cancel' §7để hủy",
+                        "§8§m                    ")));
 
         // Withdraw button (slot 11)
         menu.setItem(11, createButton(Material.HOPPER,
-            "§e§l📤 RÚT KHỎI KHO",
-            Arrays.asList(
-                "§8§m                    ",
-                "§7Lấy vật phẩm từ kho",
-                "§7ra túi đồ của bạn",
-                "",
-                "§e  ▸ §fClick §7rồi nhập số",
-                "§e  ▸ §fGõ 'all' §7để rút hết",
-                "§e  ▸ §fGõ 'cancel' §7để hủy",
-                "§8§m                    "
-            )
-        ));
+                "§e§l📤 RÚT KHỎI KHO",
+                Arrays.asList(
+                        "§8§m                    ",
+                        "§7Lấy vật phẩm từ kho",
+                        "§7ra túi đồ của bạn",
+                        "",
+                        "§e  ▸ §fClick §7rồi nhập số",
+                        "§e  ▸ §fGõ 'all' §7để rút hết",
+                        "§e  ▸ §fGõ 'cancel' §7để hủy",
+                        "§8§m                    ")));
 
         // Sell button (slot 15)
         menu.setItem(15, createButton(Material.GOLD_NUGGET,
-            "§6§l💰 BÁN",
-            Arrays.asList(
-                "§8§m                    ",
-                "§7Bán lấy tiền (Vault)",
-                "",
-                "§8  ▪ §7Giá: §e" + MessageUtil.formatNumber(price) + currency + "§7/cái",
-                "§8  ▪ §7Có: §f" + MessageUtil.formatNumber(amount) + " §7cái",
-                "§8  ▪ §7Tổng: §6§l" + MessageUtil.formatNumber(price * amount) + currency,
-                "",
-                "§6  ▸ §fClick trái: §7Nhập số",
-                "§c  ▸ §fClick giữa: §7Bán hết",
-                "§8§m                    "
-            )
-        ));
+                "§6§l💰 BÁN",
+                Arrays.asList(
+                        "§8§m                    ",
+                        "§7Bán lấy tiền (Vault)",
+                        "",
+                        "§8  ▪ §7Giá: §e" + MessageUtil.formatNumber(price) + currency + "§7/cái",
+                        "§8  ▪ §7Có: §f" + MessageUtil.formatNumber(amount) + " §7cái",
+                        "§8  ▪ §7Tổng: §6§l" + MessageUtil.formatNumber(price * amount) + currency,
+                        "",
+                        "§6  ▸ §fClick trái: §7Nhập số",
+                        "§c  ▸ §fClick giữa: §7Bán hết",
+                        "§8§m                    ")));
 
         // Sell ALL quick (slot 16)
         menu.setItem(16, createButton(Material.EMERALD,
-            "§6§l⚡ BÁN TẤT CẢ",
-            Arrays.asList(
-                "§8§m                    ",
-                "§7Bán toàn bộ §f" + MessageUtil.formatNumber(amount),
-                "§7" + ChatColor.stripColor(MessageUtil.color(getDisplayName(material))),
-                "",
-                "§7Nhận: §6§l" + MessageUtil.formatNumber(price * amount) + currency,
-                "",
-                "§c⚠ Click để bán ngay!",
-                "§8§m                    "
-            )
-        ));
+                "§6§l⚡ BÁN TẤT CẢ",
+                Arrays.asList(
+                        "§8§m                    ",
+                        "§7Bán toàn bộ §f" + MessageUtil.formatNumber(amount),
+                        "§7" + ChatColor.stripColor(MessageUtil.color(getDisplayName(material))),
+                        "",
+                        "§7Nhận: §6§l" + MessageUtil.formatNumber(price * amount) + currency,
+                        "",
+                        "§c⚠ Click để bán ngay!",
+                        "§8§m                    ")));
 
         // Back button (slot 22)
         menu.setItem(22, createButton(Material.ARROW,
-            "§c§l↩ §cQuay Lại",
-            Collections.singletonList("§7Về kho chính")
-        ));
+                "§c§l↩ §cQuay Lại",
+                Collections.singletonList("§7Về kho chính")));
 
         viewer.openInventory(menu);
     }
 
     // ═══════════════════════════════════════════════
-    //  ⚠ SELL CONFIRM GUI
+    // ⚠ SELL CONFIRM GUI
     // ═══════════════════════════════════════════════
 
     public void openSellConfirm(Player viewer, UUID targetUUID) {
         StorageHolder holder = new StorageHolder(
-            viewer.getUniqueId(), targetUUID, StorageHolder.GUIType.SELL_CONFIRM
-        );
+                viewer.getUniqueId(), targetUUID, StorageHolder.GUIType.SELL_CONFIRM);
 
         Inventory confirm = Bukkit.createInventory(holder, 27,
-            "§8┃ §c§l⚠ XÁC NHẬN BÁN TẤT CẢ §8┃");
+                "§8┃ §c§l⚠ XÁC NHẬN BÁN TẤT CẢ §8┃");
 
         // Background
         ItemStack bg = createGlass(Material.RED_STAINED_GLASS_PANE, " ");
-        for (int i = 0; i < 27; i++) confirm.setItem(i, bg);
+        for (int i = 0; i < 27; i++)
+            confirm.setItem(i, bg);
 
         // Calculate total
         Map<Material, Integer> storage = storageManager.getStorage(targetUUID);
@@ -270,9 +257,11 @@ public class StorageGUI {
         List<String> itemList = new ArrayList<>();
 
         for (Map.Entry<Material, Integer> entry : storage.entrySet()) {
-            if (entry.getValue() <= 0) continue;
+            if (entry.getValue() <= 0)
+                continue;
             double price = config.getDouble("Prices." + entry.getKey().name(), 0.0);
-            if (price <= 0) continue;
+            if (price <= 0)
+                continue;
             double value = price * entry.getValue();
             totalValue += value;
             totalItems += entry.getValue();
@@ -280,8 +269,8 @@ public class StorageGUI {
             if (itemList.size() < 8) {
                 String name = getDisplayName(entry.getKey());
                 itemList.add("§8  ▪ §f" + MessageUtil.formatNumber(entry.getValue()) + "x §7"
-                    + ChatColor.stripColor(MessageUtil.color(name))
-                    + " §8→ §e" + MessageUtil.formatNumber(value) + config.getString("Economy.Currency", "$"));
+                        + ChatColor.stripColor(MessageUtil.color(name))
+                        + " §8→ §e" + MessageUtil.formatNumber(value) + config.getString("Economy.Currency", "$"));
             }
         }
         if (itemTypes > 8) {
@@ -306,55 +295,55 @@ public class StorageGUI {
 
         // Confirm (slot 11)
         confirm.setItem(11, createButton(Material.LIME_WOOL,
-            "§a§l✓ XÁC NHẬN BÁN",
-            Arrays.asList(
-                "§8§m                    ",
-                "§7Bán §f" + MessageUtil.formatNumber(totalItems) + " §7vật phẩm",
-                "§7Nhận §6§l" + MessageUtil.formatNumber(totalValue) + currency,
-                "",
-                "§a§l  ▸ CLICK ĐỂ XÁC NHẬN",
-                "§8§m                    "
-            )
-        ));
+                "§a§l✓ XÁC NHẬN BÁN",
+                Arrays.asList(
+                        "§8§m                    ",
+                        "§7Bán §f" + MessageUtil.formatNumber(totalItems) + " §7vật phẩm",
+                        "§7Nhận §6§l" + MessageUtil.formatNumber(totalValue) + currency,
+                        "",
+                        "§a§l  ▸ CLICK ĐỂ XÁC NHẬN",
+                        "§8§m                    ")));
 
         // Cancel (slot 15)
         confirm.setItem(15, createButton(Material.RED_WOOL,
-            "§c§l✖ HỦY BỎ",
-            Arrays.asList(
-                "§8§m                    ",
-                "§7Quay lại kho",
-                "§7Không bán gì cả",
-                "",
-                "§c  ▸ Click để hủy",
-                "§8§m                    "
-            )
-        ));
+                "§c§l✖ HỦY BỎ",
+                Arrays.asList(
+                        "§8§m                    ",
+                        "§7Quay lại kho",
+                        "§7Không bán gì cả",
+                        "",
+                        "§c  ▸ Click để hủy",
+                        "§8§m                    ")));
 
         viewer.openInventory(confirm);
     }
 
     // ═══════════════════════════════════════════════
-    //  🎨 GUI COMPONENT BUILDERS
+    // 🎨 GUI COMPONENT BUILDERS
     // ═══════════════════════════════════════════════
 
     private void fillBorder(Inventory gui) {
         // Corners: Dark cyan
         ItemStack corner = createGlass(Material.CYAN_STAINED_GLASS_PANE, "§3§m  ");
-        for (int s : CORNER_SLOTS) gui.setItem(s, corner);
+        for (int s : CORNER_SLOTS)
+            gui.setItem(s, corner);
 
         // Top/Bottom edges: Light blue gradient
         ItemStack edge = createGlass(Material.LIGHT_BLUE_STAINED_GLASS_PANE, " ");
-        for (int s : TOP_BOTTOM_EDGE) gui.setItem(s, edge);
+        for (int s : TOP_BOTTOM_EDGE)
+            gui.setItem(s, edge);
 
         // Side edges: Blue
         ItemStack side = createGlass(Material.BLUE_STAINED_GLASS_PANE, " ");
-        for (int s : SIDE_EDGE) gui.setItem(s, side);
+        for (int s : SIDE_EDGE)
+            gui.setItem(s, side);
     }
 
     private ItemStack createOreItem(Material material, int amount) {
         ItemStack item = new ItemStack(material);
         ItemMeta meta = item.getItemMeta();
-        if (meta == null) return item;
+        if (meta == null)
+            return item;
 
         // Display name with amount badge
         String displayName = getDisplayName(material);
@@ -379,8 +368,8 @@ public class StorageGUI {
         if (!rawLore.isEmpty()) {
             for (String line : rawLore) {
                 String parsed = line
-                    .replace("{amount}", MessageUtil.formatNumber(amount))
-                    .replace("{price}", MessageUtil.formatNumber(price));
+                        .replace("{amount}", MessageUtil.formatNumber(amount))
+                        .replace("{price}", MessageUtil.formatNumber(price));
                 lore.add(MessageUtil.color(parsed));
             }
         } else {
@@ -407,20 +396,18 @@ public class StorageGUI {
         String icon = enabled ? "§a⚡" : "§8⚡";
 
         return createButton(mat,
-            icon + " §eTự động lưu: " + status,
-            Arrays.asList(
-                "§8§m                    ",
-                enabled
-                    ? "§a  ✓ §7Quặng đào được sẽ"
-                    : "§c  ✗ §7Quặng đào được sẽ",
-                enabled
-                    ? "§a    §7tự động vào kho"
-                    : "§c    §7rơi xuống đất",
-                "",
-                "§e  ▸ Click để " + (enabled ? "§ctắt" : "§abật"),
-                "§8§m                    "
-            )
-        );
+                icon + " §eTự động lưu: " + status,
+                Arrays.asList(
+                        "§8§m                    ",
+                        enabled
+                                ? "§a  ✓ §7Quặng đào được sẽ"
+                                : "§c  ✗ §7Quặng đào được sẽ",
+                        enabled
+                                ? "§a    §7tự động vào kho"
+                                : "§c    §7rơi xuống đất",
+                        "",
+                        "§e  ▸ Click để " + (enabled ? "§ctắt" : "§abật"),
+                        "§8§m                    "));
     }
 
     private ItemStack createCapacityItem(UUID targetUUID) {
@@ -433,27 +420,25 @@ public class StorageGUI {
         String bar = buildProgressBar(percent, 20);
 
         String capacityStr = infinity
-            ? "§a§l∞ Vô hạn"
-            : "§f" + MessageUtil.formatNumber(totalItems) + " §8/ §f" + MessageUtil.formatNumber(maxSpace);
+                ? "§a§l∞ Vô hạn"
+                : "§f" + MessageUtil.formatNumber(totalItems) + " §8/ §f" + MessageUtil.formatNumber(maxSpace);
 
         String percentColor = percent > 90 ? "§c§l" : percent > 70 ? "§e" : "§a";
 
         return createButton(Material.ENDER_CHEST,
-            "§6§l📊 Dung Lượng Kho",
-            Arrays.asList(
-                "§8§m                         ",
-                "",
-                "§7  " + bar + " " + percentColor + percent + "%",
-                "",
-                "§8  ▪ §7Đã dùng:    " + capacityStr,
-                "§8  ▪ §7Còn trống:  §f" + (infinity ? "∞"
-                    : MessageUtil.formatNumber(storageManager.getRemainingSpace(targetUUID))),
-                "§8  ▪ §7Slot nâng cấp: §b" + storageManager.getSlots(targetUUID),
-                "",
-                infinity ? "§a§l  ★ §aChế độ VIP Vô hạn" : "§7  Nâng cấp để tăng dung lượng",
-                "§8§m                         "
-            )
-        );
+                "§6§l📊 Dung Lượng Kho",
+                Arrays.asList(
+                        "§8§m                         ",
+                        "",
+                        "§7  " + bar + " " + percentColor + percent + "%",
+                        "",
+                        "§8  ▪ §7Đã dùng:    " + capacityStr,
+                        "§8  ▪ §7Còn trống:  §f" + (infinity ? "∞"
+                                : MessageUtil.formatNumber(storageManager.getRemainingSpace(targetUUID))),
+                        "§8  ▪ §7Slot nâng cấp: §b" + storageManager.getSlots(targetUUID),
+                        "",
+                        infinity ? "§a§l  ★ §aChế độ VIP Vô hạn" : "§7  Nâng cấp để tăng dung lượng",
+                        "§8§m                         "));
     }
 
     private ItemStack createSellAllButton(UUID targetUUID) {
@@ -461,7 +446,8 @@ public class StorageGUI {
         double totalValue = 0;
         int totalItems = 0;
         for (Map.Entry<Material, Integer> entry : storage.entrySet()) {
-            if (entry.getValue() <= 0) continue;
+            if (entry.getValue() <= 0)
+                continue;
             double price = config.getDouble("Prices." + entry.getKey().name(), 0.0);
             totalValue += price * entry.getValue();
             totalItems += entry.getValue();
@@ -470,19 +456,17 @@ public class StorageGUI {
         String currency = config.getString("Economy.Currency", "$");
 
         return createButton(Material.GOLD_INGOT,
-            "§6§l💰 Bán Tất Cả",
-            Arrays.asList(
-                "§8§m                    ",
-                "§7Bán toàn bộ khoáng sản",
-                "§7trong kho để lấy tiền",
-                "",
-                "§8  ▪ §7Vật phẩm: §f" + MessageUtil.formatNumber(totalItems),
-                "§8  ▪ §7Tổng giá: §6§l" + MessageUtil.formatNumber(totalValue) + currency,
-                "",
-                "§c  ⚠ §7Sẽ yêu cầu xác nhận",
-                "§8§m                    "
-            )
-        );
+                "§6§l💰 Bán Tất Cả",
+                Arrays.asList(
+                        "§8§m                    ",
+                        "§7Bán toàn bộ khoáng sản",
+                        "§7trong kho để lấy tiền",
+                        "",
+                        "§8  ▪ §7Vật phẩm: §f" + MessageUtil.formatNumber(totalItems),
+                        "§8  ▪ §7Tổng giá: §6§l" + MessageUtil.formatNumber(totalValue) + currency,
+                        "",
+                        "§c  ⚠ §7Sẽ yêu cầu xác nhận",
+                        "§8§m                    "));
     }
 
     private ItemStack createCoopButton(UUID targetUUID) {
@@ -510,13 +494,12 @@ public class StorageGUI {
         lore.add("§8§m                    ");
 
         return createButton(Material.PLAYER_HEAD,
-            "§b§l👥 Coop §8[§f" + coopCount + "§8]",
-            lore
-        );
+                "§b§l👥 Coop §8[§f" + coopCount + "§8]",
+                lore);
     }
 
     // ═══════════════════════════════════════════════
-    //  🛠 UTILITY METHODS
+    // 🛠 UTILITY METHODS
     // ═══════════════════════════════════════════════
 
     private String buildProgressBar(int percent, int length) {
@@ -527,9 +510,11 @@ public class StorageGUI {
 
         StringBuilder bar = new StringBuilder("§8[");
         bar.append(filledColor);
-        for (int i = 0; i < filled; i++) bar.append("▮");
+        for (int i = 0; i < filled; i++)
+            bar.append("▮");
         bar.append("§7");
-        for (int i = 0; i < empty; i++) bar.append("▯");
+        for (int i = 0; i < empty; i++)
+            bar.append("▯");
         bar.append("§8]");
         return bar.toString();
     }
