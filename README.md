@@ -3,7 +3,8 @@
 </p>
 
 <h1 align="center">💎 JaomcStorage 2.0</h1>
-<p align="center"><i>Plugin kho khoáng sản nâng cao cho server Skyblock — phát triển bởi <b>Tài Nguyễn</b></i></p>
+<p align="center"><i>Plugin kho khoáng sản nâng cao cho server Skyblock — phát triển bởi <br> <b>Tài Dev Nguyễn</b></i></p> 
+<hr>
 
 <p align="center">
   <img src="https://img.shields.io/badge/Minecraft-1.20%2B-2D7D46?style=flat-square&logo=minecraft" />
@@ -40,6 +41,7 @@ When players mine ores, items are **automatically stored** in a virtual storage 
 ## 🔑 Tính Năng Chính
 
 ### ⛏ Khai Thác & Lưu Trữ
+
 - ✅ **AutoStore** — Tự động lưu quặng vào kho khi đào block
 - ✅ **Fortune Support** — Hỗ trợ enchantment Fortune tăng drop
 - ✅ **XP Bonus** — Vẫn cho kinh nghiệm khi đào
@@ -47,28 +49,33 @@ When players mine ores, items are **automatically stored** in a virtual storage 
 - ✅ **Partial Store** — Kho gần đầy? Lưu được bao nhiêu thì lưu, dư rơi ra đất
 
 ### ⛔ Giới Hạn & Nâng Cấp
+
 - ✅ **MaxSpace** — Giới hạn dung lượng kho (mặc định 100,000)
 - ✅ **BlockedMining** — Chặn đào block nếu kho đầy
 - ✅ **Infinity Mode** — Kho vô hạn cho VIP (`/jaostorage infinity`)
 - ✅ **Slot Upgrade** — Hệ thống nâng cấp slot linh hoạt
 
 ### 💰 Kinh Tế
+
 - ✅ **Vault Economy** — Bán khoáng sản thực sự nhận tiền
 - ✅ **Sell All** — Bán toàn bộ kho với GUI xác nhận
 - ✅ **Bảng giá** — Cấu hình giá bán từng loại trong `config.yml`
 
 ### 👥 Coop System
+
 - ✅ **Chia sẻ kho** — Thêm/xóa thành viên coop
 - ✅ **Access Control** — Coop member có thể xem & cất vào kho chủ
 - ✅ **Persistent** — Dữ liệu coop lưu trong database, không mất khi restart
 
 ### 🎨 Giao Diện
+
 - ✅ **Premium GUI** — Gradient border, rarity tags, capacity bar
 - ✅ **ActionBar** — Thông báo nhặt item đẹp mắt
 - ✅ **Sound Effects** — Âm thanh cho mọi tương tác
 - ✅ **FormatName & FormatLore** — Tùy chỉnh tên/mô tả tiếng Việt
 
 ### 🔧 Kỹ Thuật
+
 - ✅ **SQLite Database** — Hiệu suất cao, async I/O
 - ✅ **In-memory Cache** — Đọc nhanh từ cache, ghi async vào DB
 - ✅ **Auto-save** — Tự động lưu định kỳ (cấu hình được)
@@ -81,14 +88,14 @@ When players mine ores, items are **automatically stored** in a virtual storage 
 
 ## 🔑 Main Features
 
-| Category | Features |
-|----------|----------|
-| **Mining** | AutoStore, Fortune, XP, Item Pickup, Partial Store |
-| **Limits** | MaxSpace, BlockedMining, Infinity Mode, Slot Upgrade |
-| **Economy** | Vault selling, Sell All with confirmation, Configurable prices |
-| **Coop** | Share storage, Access control, Persistent in database |
-| **GUI** | Gradient borders, Rarity tags, Capacity bar, Sound effects |
-| **Tech** | SQLite, In-memory cache, Async I/O, Action logging, PlaceholderAPI |
+| Category    | Features                                                           |
+| ----------- | ------------------------------------------------------------------ |
+| **Mining**  | AutoStore, Fortune, XP, Item Pickup, Partial Store                 |
+| **Limits**  | MaxSpace, BlockedMining, Infinity Mode, Slot Upgrade               |
+| **Economy** | Vault selling, Sell All with confirmation, Configurable prices     |
+| **Coop**    | Share storage, Access control, Persistent in database              |
+| **GUI**     | Gradient borders, Rarity tags, Capacity bar, Sound effects         |
+| **Tech**    | SQLite, In-memory cache, Async I/O, Action logging, PlaceholderAPI |
 
 ---
 
@@ -103,15 +110,17 @@ When players mine ores, items are **automatically stored** in a virtual storage 
 ```
 
 ### Yêu cầu
-| Yêu cầu | Phiên bản |
-|----------|-----------|
-| Spigot / Paper | 1.20+ |
-| Java | 17+ |
-| Vault | Bắt buộc |
+
+| Yêu cầu        | Phiên bản               |
+| -------------- | ----------------------- |
+| Spigot / Paper | 1.20+                   |
+| Java           | 17+                     |
+| Vault          | Bắt buộc                |
 | Economy Plugin | Essentials / CMI / etc. |
-| PlaceholderAPI | Tùy chọn |
+| PlaceholderAPI | Tùy chọn                |
 
 ### Nâng cấp từ v1.0
+
 > Plugin sẽ **tự động phát hiện** file `storage.yml` cũ và migrate toàn bộ dữ liệu sang SQLite. File cũ được đổi tên thành `storage.yml.migrated`.
 
 ---
@@ -122,8 +131,8 @@ When players mine ores, items are **automatically stored** in a virtual storage 
 
 ```yaml
 # ⛏ Auto Store
-PickupToStorage: true       # Tự động lưu khi đào
-BlockedMining: true         # Chặn đào nếu kho đầy
+PickupToStorage: true # Tự động lưu khi đào
+BlockedMining: true # Chặn đào nếu kho đầy
 OnlyStoreWhenInvFull: false # Chỉ lưu khi túi đầy
 PickupSound: ENTITY_ITEM_PICKUP
 UseActionBar: true
@@ -175,46 +184,46 @@ ores:
 
 ### `/kho` — Lệnh người chơi
 
-| Lệnh | Quyền | Mô tả |
-|-------|-------|-------|
-| `/kho` | `jaostorage.kho` | Mở GUI kho cá nhân |
-| `/kho store <item> <số\|all>` | `jaostorage.kho` | Cất vật phẩm từ túi vào kho |
-| `/kho take <item> <số\|all>` | `jaostorage.kho` | Rút vật phẩm từ kho ra túi |
-| `/kho info` | `jaostorage.kho` | Xem thông tin kho |
-| `/kho coop add <tên>` | `jaostorage.kho` | Thêm thành viên coop |
-| `/kho coop remove <tên>` | `jaostorage.kho` | Xóa thành viên coop |
-| `/kho coop list` | `jaostorage.kho` | Xem danh sách coop |
-| `/kho open <player>` | `jaostorage.admin` | Mở kho người chơi khác |
-| `/kho add <player> <item> <số>` | `jaostorage.admin` | Thêm vật phẩm (admin) |
-| `/kho remove <player> <item> <số>` | `jaostorage.admin` | Xóa vật phẩm (admin) |
+| Lệnh                               | Quyền              | Mô tả                       |
+| ---------------------------------- | ------------------ | --------------------------- |
+| `/kho`                             | `jaostorage.kho`   | Mở GUI kho cá nhân          |
+| `/kho store <item> <số\|all>`      | `jaostorage.kho`   | Cất vật phẩm từ túi vào kho |
+| `/kho take <item> <số\|all>`       | `jaostorage.kho`   | Rút vật phẩm từ kho ra túi  |
+| `/kho info`                        | `jaostorage.kho`   | Xem thông tin kho           |
+| `/kho coop add <tên>`              | `jaostorage.kho`   | Thêm thành viên coop        |
+| `/kho coop remove <tên>`           | `jaostorage.kho`   | Xóa thành viên coop         |
+| `/kho coop list`                   | `jaostorage.kho`   | Xem danh sách coop          |
+| `/kho open <player>`               | `jaostorage.admin` | Mở kho người chơi khác      |
+| `/kho add <player> <item> <số>`    | `jaostorage.admin` | Thêm vật phẩm (admin)       |
+| `/kho remove <player> <item> <số>` | `jaostorage.admin` | Xóa vật phẩm (admin)        |
 
 ### `/autostore` — Toggle nhanh
 
-| Lệnh | Quyền | Mô tả |
-|-------|-------|-------|
+| Lệnh         | Quyền                  | Mô tả                   |
+| ------------ | ---------------------- | ----------------------- |
 | `/autostore` | `jaostorage.autostore` | Bật/tắt tự động lưu kho |
 
 ### `/jaostorage` — Lệnh admin
 
-| Lệnh | Quyền | Mô tả |
-|-------|-------|-------|
-| `/jaostorage reload` | `jaostorage.admin` | Reload config.yml + guiore.yml |
-| `/jaostorage open <player>` | `jaostorage.admin` | Mở kho người chơi |
-| `/jaostorage add <player> <item> <số>` | `jaostorage.admin` | Thêm vật phẩm vào kho |
-| `/jaostorage remove <player> <item> <số>` | `jaostorage.admin` | Xóa vật phẩm khỏi kho |
-| `/jaostorage infinity <player>` | `jaostorage.admin` | Toggle kho vô hạn |
-| `/jaostorage info <player>` | `jaostorage.admin` | Xem chi tiết kho + top items |
-| `/jaostorage cleanup [days]` | `jaostorage.admin` | Dọn log cũ |
+| Lệnh                                      | Quyền              | Mô tả                          |
+| ----------------------------------------- | ------------------ | ------------------------------ |
+| `/jaostorage reload`                      | `jaostorage.admin` | Reload config.yml + guiore.yml |
+| `/jaostorage open <player>`               | `jaostorage.admin` | Mở kho người chơi              |
+| `/jaostorage add <player> <item> <số>`    | `jaostorage.admin` | Thêm vật phẩm vào kho          |
+| `/jaostorage remove <player> <item> <số>` | `jaostorage.admin` | Xóa vật phẩm khỏi kho          |
+| `/jaostorage infinity <player>`           | `jaostorage.admin` | Toggle kho vô hạn              |
+| `/jaostorage info <player>`               | `jaostorage.admin` | Xem chi tiết kho + top items   |
+| `/jaostorage cleanup [days]`              | `jaostorage.admin` | Dọn log cũ                     |
 
 ---
 
 ## 🔑 Quyền (Permissions)
 
-| Permission | Mặc định | Mô tả |
-|------------|----------|-------|
-| `jaostorage.kho` | `true` | Truy cập kho cá nhân + coop |
-| `jaostorage.autostore` | `true` | Bật/tắt auto-store |
-| `jaostorage.admin` | `op` | Toàn quyền quản trị plugin |
+| Permission             | Mặc định | Mô tả                       |
+| ---------------------- | -------- | --------------------------- |
+| `jaostorage.kho`       | `true`   | Truy cập kho cá nhân + coop |
+| `jaostorage.autostore` | `true`   | Bật/tắt auto-store          |
+| `jaostorage.admin`     | `op`     | Toàn quyền quản trị plugin  |
 
 ---
 
@@ -222,17 +231,17 @@ ores:
 
 Cài PlaceholderAPI để sử dụng trên scoreboard, hologram, tab list:
 
-| Placeholder | Output | Ví dụ |
-|-------------|--------|-------|
-| `%jaostorage_total%` | Tổng items trong kho | `1,250` |
-| `%jaostorage_maxspace%` | Dung lượng tối đa | `100,000` |
-| `%jaostorage_remaining%` | Dung lượng còn lại | `98,750` |
-| `%jaostorage_slot%` | Số slot nâng cấp | `5` |
-| `%jaostorage_infinity%` | Chế độ vô hạn | `true` / `false` |
-| `%jaostorage_autostore%` | Trạng thái auto-store | `true` / `false` |
-| `%jaostorage_coop_count%` | Số coop members | `3` |
-| `%jaostorage_amount_DIAMOND%` | Số lượng Diamond | `150` |
-| `%jaostorage_amount_COAL%` | Số lượng Coal | `500` |
+| Placeholder                   | Output                | Ví dụ            |
+| ----------------------------- | --------------------- | ---------------- |
+| `%jaostorage_total%`          | Tổng items trong kho  | `1,250`          |
+| `%jaostorage_maxspace%`       | Dung lượng tối đa     | `100,000`        |
+| `%jaostorage_remaining%`      | Dung lượng còn lại    | `98,750`         |
+| `%jaostorage_slot%`           | Số slot nâng cấp      | `5`              |
+| `%jaostorage_infinity%`       | Chế độ vô hạn         | `true` / `false` |
+| `%jaostorage_autostore%`      | Trạng thái auto-store | `true` / `false` |
+| `%jaostorage_coop_count%`     | Số coop members       | `3`              |
+| `%jaostorage_amount_DIAMOND%` | Số lượng Diamond      | `150`            |
+| `%jaostorage_amount_COAL%`    | Số lượng Coal         | `500`            |
 
 ---
 
@@ -242,14 +251,15 @@ Plugin sử dụng **SQLite** (file `storage.db` trong thư mục plugin). Khôn
 
 ### Bảng dữ liệu
 
-| Bảng | Mô tả |
-|------|-------|
-| `player_storage` | Vật phẩm trong kho (uuid, material, amount) |
-| `player_settings` | Cài đặt người chơi (auto_store, slots, infinity) |
-| `coop_members` | Quan hệ chia sẻ kho (owner, member) |
-| `storage_logs` | Nhật ký hành động (action, material, amount, timestamp) |
+| Bảng              | Mô tả                                                   |
+| ----------------- | ------------------------------------------------------- |
+| `player_storage`  | Vật phẩm trong kho (uuid, material, amount)             |
+| `player_settings` | Cài đặt người chơi (auto_store, slots, infinity)        |
+| `coop_members`    | Quan hệ chia sẻ kho (owner, member)                     |
+| `storage_logs`    | Nhật ký hành động (action, material, amount, timestamp) |
 
 ### Tối ưu hiệu suất
+
 - **WAL mode** — Cho phép đọc/ghi đồng thời
 - **In-memory cache** — Tất cả đọc từ RAM, không query DB
 - **Async batch write** — Ghi DB trên thread riêng, không lag main thread
@@ -271,6 +281,7 @@ mvn clean package
 ## 📝 Changelog
 
 ### v2.0 (Major Rewrite)
+
 - 🆕 SQLite database thay YAML flat-file
 - 🆕 Vault Economy tích hợp hoàn chỉnh (bán thực sự trả tiền)
 - 🆕 Coop System với database persistence
@@ -288,6 +299,7 @@ mvn clean package
 - 🐛 Fix PlaceholderAPI không được đăng ký
 
 ### v1.0 (Initial Release)
+
 - AutoStore cơ bản
 - GUI kho 54 slots
 - Lệnh /kho, /autostore, /jaostorage
